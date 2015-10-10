@@ -81,12 +81,14 @@ class SparkPersistEvaluation:
         network_read_middle, network_write_middle = self.get_statistics.get_net_data()
         time3 = time.time()
         output_rdd = self.sqlContext.sql(query)
-        output_rdd.show() # uses the cached input table while computing
+        output_rdd.count() # uses the cached input table while computing
         time4 = time.time()
         network_read_after, network_write_after = self.get_statistics.get_net_data()
         vda_read_after, vda_write_after = self.get_statistics.get_disc_data()
         self.cleanup()
-        print "\nTime", (time2-time1), "\nCached Time", (time4-time3), "\nDisc Read",(vda_read_after-vda_read_middle), "\nDisc Write",(vda_write_after-vda_write_middle), "\nNet Read",(network_read_after-network_read_middle), "\nNet Write",(network_write_after-network_write_middle) 
+        print "\nTime", (time2-time1), "\nCached Time", (time4-time3)
+        print "While Cacheing\nDisc Read",(vda_read_middle-vda_read_before), "\nDisc Write",(vda_write_middle-vda_write_before), "\nNet Read",(network_read_middle-network_read_before), "\nNet Write",(network_write_middle-network_write_before) 
+        print "After Cacheing\nDisc Read",(vda_read_after-vda_read_middle), "\nDisc Write",(vda_write_after-vda_write_middle), "\nNet Read",(network_read_after-network_read_middle), "\nNet Write",(network_write_after-network_write_middle) 
 
     def evaluate_output_cached(self):
 
@@ -98,19 +100,22 @@ class SparkPersistEvaluation:
         output_rdd = self.sqlContext.sql(query)
         output_rdd.registerTempTable("output_rdd")
         self.sqlContext.cacheTable("output_rdd")
-        output_rdd.show()
+        output_rdd.count()
         time2 = time.time()
 
         vda_read_middle, vda_write_middle = self.get_statistics.get_disc_data()
         network_read_middle, network_write_middle = self.get_statistics.get_net_data()
         time3 = time.time()
         output_mod = self.sqlContext.sql("SELECT * FROM output_rdd")
-        output_mod.show()
+        output_mod.count()
         time4 = time.time()
         network_read_after, network_write_after = self.get_statistics.get_net_data()
         vda_read_after, vda_write_after = self.get_statistics.get_disc_data()
         self.cleanup()
-        print "\nTime", (time2-time1), "\nCached Time", (time4-time3), "\nDisc Read",(vda_read_after-vda_read_middle), "\nDisc Write",(vda_write_after-vda_write_middle), "\nNet Read",(network_read_after-network_read_middle), "\nNet Write",(network_write_after-network_write_middle) 
+        print "\nTime", (time2-time1), "\nCached Time", (time4-time3)
+        print "While Cacheing\nDisc Read",(vda_read_middle-vda_read_before), "\nDisc Write",(vda_write_middle-vda_write_before), "\nNet Read",(network_read_middle-network_read_before), "\nNet Write",(network_write_middle-network_write_before) 
+        print "After Cacheing\nDisc Read",(vda_read_after-vda_read_middle), "\nDisc Write",(vda_write_after-vda_write_middle), "\nNet Read",(network_read_after-network_read_middle), "\nNet Write",(network_write_after-network_write_middle) 
+        #print "\nTime", (time2-time1), "\nCached Time", (time4-time3), "\nDisc Read",(vda_read_after-vda_read_middle), "\nDisc Write",(vda_write_after-vda_write_middle), "\nNet Read",(network_read_after-network_read_middle), "\nNet Write",(network_write_after-network_write_middle) 
 
 if __name__ == "__main__":
     spark_persist_evaluation = SparkPersistEvaluation()
