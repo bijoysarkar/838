@@ -11,7 +11,6 @@ from pyspark.sql import HiveContext
 
 if __name__ == "__main__":
     conf = (SparkConf().set("spark.app.name", "CS-838-Assignment2-Question3")
-            .set("spark.app.name", "CS-838-Assignment2-Question2")
             .set("spark.master", "spark://10.0.1.96:7077")
             .set("spark.driver.memory", "1g")
             .set("spark.eventLog.enabled", "true")

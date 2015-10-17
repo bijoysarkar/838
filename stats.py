@@ -3,9 +3,6 @@ import sys
 import time
 from subprocess import check_output
 
-# sudo sh -c "sync; echo 3 > /proc/sys/vm/drop_caches 
-# cat /proc/net/dev
-# cat /proc/diskstats
 class GetStatistics:
 
     def __init__(self):
@@ -16,6 +13,7 @@ class GetStatistics:
 	    workers = f.readlines()
         return workers
 
+    # Obtain disk data from each worker node
     def get_disc_data(self):
         vda_read_total = 0
         vda_write_total = 0
@@ -35,6 +33,7 @@ class GetStatistics:
         else:
             print "Error"
 
+    # Obtain network data from each worker node
     def get_net_data(self):
         network_read_total = 0
         network_write_total = 0
